@@ -1,1 +1,60 @@
-backend/.env
+# --- Global ignores ---
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build
+dist/
+build/
+tmp/
+temp/
+
+# Angular
+.angular/
+.angular/cache/
+
+# Logs
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode/
+.idea/
+
+# Python / Backend
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Env & secrets
+.env
+.env.local
+.env.*.local
+
+# Virtualenv
+.venv/
+venv/
+ENV/
+
+# Coverage
+coverage/
+*.lcov
+
+# Others
+*.swp
