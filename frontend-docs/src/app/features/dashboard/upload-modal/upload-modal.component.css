@@ -1,9 +1,15 @@
+/* Contenedor raíz para asegurar stacking por encima del layout */
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
 /* Overlay: cierra al hacer click */
 .overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
 }
 
 /* Modal */
@@ -11,15 +17,16 @@
   position: fixed;
   top: 50%;
   left: 50%;
+  max-height: 90vh;
+  overflow: auto;
   transform: translate(-50%, -50%);
   background: #fff;
   border-radius: 12px;
-  width: 90%;
-  max-width: 480px;
+  width: 92%;
+  max-width: 520px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  z-index: 1001;
   animation: fadeIn 0.25s ease;
 }
 

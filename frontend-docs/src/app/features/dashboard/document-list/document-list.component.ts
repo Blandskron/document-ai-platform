@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DocumentService } from '../../../core/api/document.service';
 import { Document } from '../../../models/document.model';
-import { UploadButtonComponent } from '../upload-button/upload-button.component';
 
 @Component({
   selector: 'app-document-list',
   standalone: true,
-  imports: [CommonModule, UploadButtonComponent],
+  imports: [CommonModule],
   templateUrl: './document-list.component.html',
 })
 export class DocumentListComponent implements OnInit {

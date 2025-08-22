@@ -6,13 +6,22 @@ import { HttpClient } from '@angular/common/http';
 import { SearchBarComponent } from '../../shared/search-bar/search-bar.component';
 import { DocumentListComponent } from './document-list/document-list.component';
 import { AiSearchComponent } from './ai-search/ai-search.component';
-import { UploadButtonComponent } from '../dashboard/upload-button/upload-button.component';
-import { UploadModalComponent } from '../dashboard/upload-modal/upload-modal.component';
+import { UploadButtonComponent } from './upload-button/upload-button.component';
+import { UploadModalComponent } from './upload-modal/upload-modal.component';
+import { AiService } from '../../core/api/ai.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, SearchBarComponent, DocumentListComponent, AiSearchComponent, UploadButtonComponent, UploadModalComponent],
+  imports: [
+    CommonModule,
+    SearchBarComponent,
+    DocumentListComponent,
+    AiSearchComponent,
+    AiSearchComponent,
+    UploadButtonComponent,
+    UploadModalComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -25,7 +34,7 @@ export class DashboardComponent {
   menuOpen = false;
   showUpload = false;
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient, private ai: AiService) {
     this.loadDocuments();
   }
 
@@ -43,15 +52,12 @@ export class DashboardComponent {
 
   onSearch(query: string) {
     const token = localStorage.getItem('token');
+
     if (this.aiMode) {
-      this.http
-        .get<{ answer: string }>(`/api/documents/search/?q=${query}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .subscribe({
-          next: (res) => (this.aiResponse = res.answer),
-          error: () => (this.aiResponse = `Respuesta IA simulada para: ${query}`),
-        });
+      this.ai.search(query).subscribe({
+        next: (res) => (this.aiResponse = res.result),
+        error: () => (this.aiResponse = `No se pudo obtener respuesta para: ${query}`),
+      });
     } else {
       this.http
         .get<any[]>(`/api/documents/list/?q=${query}`, {
@@ -77,8 +83,9 @@ export class DashboardComponent {
     this.showUpload = true;
   }
 
-  handleClose(event: any) {
+  handleClose(success: boolean) {
     this.showUpload = false;
+    if (success) this.loadDocuments();
   }
 
   logout() {

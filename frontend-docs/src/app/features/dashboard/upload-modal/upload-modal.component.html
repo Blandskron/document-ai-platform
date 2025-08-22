@@ -1,7 +1,17 @@
-<!-- Overlay que cierra al hacer click afuera -->
-<div class="overlay" (click)="close()">
-  <!-- Caja modal (click.stop evita cerrar si haces click adentro) -->
-  <div class="modal" (click)="$event.stopPropagation()">
+<!-- Root contenedor para stacking correcto -->
+<div class="modal-root">
+  <!-- Overlay -->
+  <div class="overlay" (click)="close()"></div>
+
+  <!-- Caja modal -->
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    tabindex="0"
+    (keydown.escape)="close()"
+    (click)="$event.stopPropagation()"
+  >
     <header class="modal-header">
       <h2>📄 Subir documento</h2>
       <button class="close-btn" (click)="close()" aria-label="Cerrar">✕</button>
