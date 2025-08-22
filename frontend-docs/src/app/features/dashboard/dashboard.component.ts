@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -26,6 +26,8 @@ import { AiService } from '../../core/api/ai.service';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
+  @ViewChild(DocumentListComponent) docList!: DocumentListComponent;
+
   documents: any[] = [];
   aiResponse: string | null = null;
   aiMode = false;
@@ -85,7 +87,9 @@ export class DashboardComponent {
 
   handleClose(success: boolean) {
     this.showUpload = false;
-    if (success) this.loadDocuments();
+    if (success && this.docList) {
+      this.docList.fetchDocuments();
+    }
   }
 
   logout() {
