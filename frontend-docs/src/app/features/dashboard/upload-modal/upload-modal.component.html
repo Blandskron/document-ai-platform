@@ -1,0 +1,38 @@
+<!-- Overlay que cierra al hacer click afuera -->
+<div class="overlay" (click)="close()">
+  <!-- Caja modal (click.stop evita cerrar si haces click adentro) -->
+  <div class="modal" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h2>📄 Subir documento</h2>
+      <button class="close-btn" (click)="close()" aria-label="Cerrar">✕</button>
+    </header>
+
+    <section class="modal-body">
+      <label class="field">
+        <span>Título</span>
+        <input type="text" [(ngModel)]="title" placeholder="Título del documento" />
+      </label>
+
+      <label class="file-upload">
+        <input type="file" (change)="onFileSelected($event)" hidden />
+        <span>📂 {{ file?.name || 'Seleccionar archivo' }}</span>
+      </label>
+
+      <div *ngIf="isLoading" class="loading">
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+        <p>Subiendo documento...</p>
+      </div>
+    </section>
+
+    <footer class="modal-footer">
+      <button class="btn cancel" (click)="close()">Cancelar</button>
+      <button
+        class="btn primary"
+        (click)="upload()"
+        [disabled]="!file || !title || isLoading"
+      >
+        ☁️ Subir
+      </button>
+    </footer>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Permite que el contenido del dialog se ajuste automáticamente */
+.mat-mdc-dialog-content {
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0 24px 24px 24px; /* padding uniforme */
+}
+
+/* Responsividad: ancho máximo relativo al viewport */
+.mat-mdc-dialog-container {
+  width: auto !important;
+  max-width: 600px; /* en pantallas grandes no sobrepasa esto */
+  min-width: 300px; /* en pantallas pequeñas no colapsa */
+  margin: 16px; /* margen automático para no pegarse a los bordes */
+  border-radius: 12px;
+}
+
+/* Ajuste responsive para móviles */
+@media (max-width: 600px) {
+  .mat-mdc-dialog-container {
+    max-width: 95vw !important;
+    margin: 8px;
+  }
+}

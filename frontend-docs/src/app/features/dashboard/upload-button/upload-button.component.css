@@ -1,0 +1,29 @@
+.upload-btn {
+  position: fixed;
+  bottom: 100px; /* un poco más arriba para no chocar con el otro botón */
+  right: 24px;
+  z-index: 1000;
+
+  background-color: #28a745; /* verde */
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+
+  border: none;
+  border-radius: 50px;
+  padding: 12px 28px;
+
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.upload-btn:hover {
+  background-color: #218838; /* verde más oscuro */
+  transform: scale(1.05);
+}
+
+.upload-btn:active {
+  background-color: #1e7e34;
+  transform: scale(0.95);
+}

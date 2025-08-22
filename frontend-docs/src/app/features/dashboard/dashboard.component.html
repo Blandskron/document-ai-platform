@@ -1,0 +1,58 @@
+<div class="flex flex-col h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-md p-4 flex items-center justify-between">
+    <h1 class="text-xl font-bold text-blue-600">📂 Document AI</h1>
+
+    <app-search-bar
+      (search)="onSearch($event)"
+      class="flex-1 mx-6"
+    ></app-search-bar>
+
+    <div class="relative">
+      <img
+        src="https://ui-avatars.com/api/?name={{username}}&background=2563eb&color=fff"
+        alt="User Avatar"
+        class="w-10 h-10 rounded-full cursor-pointer"
+        (click)="toggleMenu()"
+      />
+
+      <div
+        *ngIf="menuOpen"
+        class="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10"
+      >
+        <button
+          (click)="logout()"
+          class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+        >
+          🚪 Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="flex-1 overflow-y-auto p-6">
+    <div *ngIf="!aiMode; else aiView">
+      <app-document-list></app-document-list>
+    </div>
+
+    <ng-template #aiView>
+      <app-ai-search [response]="aiResponse"></app-ai-search>
+    </ng-template>
+  </main>
+
+  <!-- Floating Actions -->
+  <div class="absolute bottom-6 right-6 flex flex-col gap-3">
+    <app-upload-button (clicked)="openUploadModal()"></app-upload-button>
+
+    <app-upload-modal *ngIf="showUpload" (closed)="handleClose($event)">
+    </app-upload-modal>
+
+    <button
+      (click)="toggleAiMode()"
+      class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full shadow-lg font-semibold"
+    >
+      🤖 {{ aiMode ? 'Volver' : 'Buscar con IA' }}
+    </button>
+  </div>
+</div>
