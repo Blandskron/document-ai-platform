@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
-from openai import OpenAI  # ✅ nuevo cliente
+from openai import OpenAI
 
 from .models import Document
 from .serializers import DocumentSerializer
@@ -16,7 +16,7 @@ from .utils import get_file_content, generate_summary
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
-# 📄 Listar documentos del usuario
+# Listar documentos del usuario
 class DocumentListView(generics.ListAPIView):
     serializer_class = DocumentSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -25,7 +25,7 @@ class DocumentListView(generics.ListAPIView):
         return Document.objects.filter(user=self.request.user)
 
 
-# 📤 Subir documento con resumen automático
+# Subir documento con resumen automático
 class DocumentUploadView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
@@ -52,7 +52,7 @@ class DocumentUploadView(APIView):
 
         title = request.data.get("title", file_obj.name)
 
-        # 📂 Guardar archivo en carpeta uploads/
+        # Guardar archivo en carpeta uploads/
         upload_path = Path(settings.MEDIA_ROOT) / "uploads"
         upload_path.mkdir(parents=True, exist_ok=True)
 
@@ -63,14 +63,13 @@ class DocumentUploadView(APIView):
             for chunk in file_obj.chunks():
                 dest.write(chunk)
 
-        # 📌 Crear registro en DB
+        # Crear registro en DB
         document = Document.objects.create(
             user=request.user,
             file=f"uploads/{file_path.name}",
             title=title
         )
 
-        # 🧠 Generar resumen (puede usar tu utils o directamente OpenAI)
         content = get_file_content(str(file_path))
         document.summary = generate_summary(content)
         document.save()
@@ -78,7 +77,7 @@ class DocumentUploadView(APIView):
         return Response(DocumentSerializer(document).data, status=201)
 
 
-# 🔍 Buscar con IA en resúmenes
+# Buscar con IA en resúmenes
 class DocumentSearchAI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -104,7 +103,7 @@ class DocumentSearchAI(APIView):
         if not summaries.strip():
             return Response({"query": query, "result": "No hay documentos con resúmenes"})
 
-        # 📌 Prompt para IA
+        # Prompt para IA
         prompt = (
             f"El usuario busca: {query}\n"
             f"Busca en los resúmenes de documentos:\n{summaries}\n\n"
@@ -113,7 +112,7 @@ class DocumentSearchAI(APIView):
 
         try:
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",   # ✅ puedes cambiar a gpt-4o-mini si quieres mejor calidad
+                model="gpt-3.5-turbo",   # puedes cambiar a gpt-4o-mini si quieres mejor calidad
                 messages=[
                     {"role": "system", "content": "Eres un asistente que ayuda a buscar en resúmenes de documentos."},
                     {"role": "user", "content": prompt}
@@ -123,7 +122,7 @@ class DocumentSearchAI(APIView):
             )
             result = response.choices[0].message.content.strip()
         except Exception as e:
-            print(f"❌ Error en búsqueda IA: {e}")
+            print(f"Error en búsqueda IA: {e}")
             result = "Error en búsqueda con IA"
 
         return Response({"query": query, "result": result})

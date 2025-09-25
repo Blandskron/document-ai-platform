@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from PyPDF2 import PdfReader
-from openai import OpenAI  # ✅ nuevo import
+from openai import OpenAI
 
 # Inicializar cliente con la API key
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -36,7 +36,7 @@ def generate_summary(content: str) -> str:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",  # ✅ puedes cambiar a gpt-4o-mini si prefieres
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "Eres un asistente que resume documentos."},
                 {"role": "user", "content": summary_prompt}
@@ -46,5 +46,5 @@ def generate_summary(content: str) -> str:
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        print(f"❌ Error generando resumen: {e}")
+        print(f"Error generando resumen: {e}")
         return "Error generando resumen"
